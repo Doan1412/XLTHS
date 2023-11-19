@@ -7,7 +7,7 @@ from const import *
 
 def to_fft(frame):
     fft = torch.fft.fft(input=frame, n=N_FFT)
-    return fft.reshape(-1)[:int(N_FFT/2)]
+    return torch.abs(fft.reshape(-1)[:int(N_FFT/2)])
 
 
 def to_mean_fft_one(person, vowel_path):

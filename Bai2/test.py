@@ -6,9 +6,12 @@ import numpy as np
 from const import *
 
 
+# def to_fft(frame):
+#     fft = torch.fft.fft(input=frame, n=N_FFT)
+#     return fft.reshape(-1)[:int(N_FFT/2)]
 def to_fft(frame):
     fft = torch.fft.fft(input=frame, n=N_FFT)
-    return fft.reshape(-1)[:int(N_FFT/2)]
+    return torch.abs(fft.reshape(-1)[:int(N_FFT/2)])
 
 
 def to_mean_fft_one(person, vowel_path):
@@ -22,8 +25,9 @@ def to_mean_fft_one(person, vowel_path):
     return mean_fft
 
 
-# def euclidean(v1, v2):
-#     return sum((p-q)**2 for p, q in zip(v1, v2)) ** .5
+def euclidean(v1, v2):
+    return sum((p-q)**2 for p, q in zip(v1, v2)) ** .5
+
 
 def euclidean_distance_complex(list1, list2):
     # Convert lists to numpy arrays
@@ -47,7 +51,7 @@ def predict_one(data, person, vowel_path):
     dist = {}
     fft = to_mean_fft_one(person, vowel_path).tolist()
     for label in data.keys():
-        dist[label] = euclidean_distance_complex(data[label], fft)
+        dist[label] = euclidean(data[label], fft)
     return min(dist, key=lambda k: dist[k])
 
 
@@ -67,7 +71,8 @@ with open(mean_file, 'r') as csv_file:
     # Read the data rows
     for row in csv_reader:
         for i, value in enumerate(row):
-            data[header[i]].append(complex(value))
+            value = float(value)
+            data[header[i]].append(value)
 counter = {
     'a': 0,
     'e': 0,
