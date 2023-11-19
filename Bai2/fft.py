@@ -3,13 +3,8 @@ import os
 import torchaudio
 import torch
 import matplotlib.pyplot as plt
+from const import *
 
-N_FFT = 2048
-STABLE_DELTA = 0.13
-SAMPLE_RATE = 16000
-FRAME_SIZE = int(30*(10**-3)*SAMPLE_RATE)
-HOP_SIZE = int(10*(10**-3)*SAMPLE_RATE)
-START_INDEX = int(STABLE_DELTA * SAMPLE_RATE)
 
 waveform, sample_rate = torchaudio.load(os.path.join(
     os.path.dirname(__file__), 'train_clean', '23MTL', 'a.wav'))

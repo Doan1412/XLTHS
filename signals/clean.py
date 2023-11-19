@@ -5,28 +5,29 @@ from tqdm import tqdm
 
 CLEAN = os.path.join(os.path.dirname(__file__), 'test_clean')
 RAW = os.path.join(os.path.dirname(__file__), 'test_raw')
-THRESHOLD = 0.015
+THRESHOLD = 0.01
 SAMPLE_RATE = 16000
 
 
-def filter(y, rate):
+# def filter(y, rate):
+#     mask = []
+#     window_size = int(5*(10**-3)*rate)
+#     y_abs = torch.abs(y)
+#     y_abs = torch.nn.functional.pad(y_abs, (0, window_size-1))
+#     y_mean = y_abs.unfold(0, window_size, 1).max(1).values
+#     mask = y_mean > THRESHOLD
+#     return mask
+
+
+def STE_filter(y, rate):
     mask = []
     window_size = int(5*(10**-3)*rate)
-    y_abs = torch.abs(y)
-    y_abs = torch.nn.functional.pad(y_abs, (0, window_size-1))
-    y_mean = y_abs.unfold(0, window_size, 1).max(1).values
-    mask = y_mean > THRESHOLD
-    return mask
-
-# def magnitude_average(vector, window_size):
-#     mask = torch.zeros_like(vector, dtype=torch.bool)
-
-#     for i in range(0, len(vector) - window_size + 1, window_size):
-#         window_sum = torch.sum(vector[i:i+window_size])
-#         if window_sum > THRESHOLD*window_size:
-#             mask[i:i+window_size] = True
-
-#     return mask
+    y = torch.nn.functional.pad(y, (0, window_size-1))
+    y = y.tolist()
+    for i in range(0, len(y) - window_size + 1, 1):
+        window_ste = sum(x**2 for x in y[i:i+window_size])
+        mask.append(window_ste > THRESHOLD)
+    return torch.tensor(mask)
 
 
 def downsample_mono(path, sr):
@@ -65,9 +66,9 @@ def split_wavs():
         for fn in tqdm(os.listdir(src_dir)):
             src_fn = os.path.join(src_dir, fn)
             rate, wav = downsample_mono(src_fn, SAMPLE_RATE)
-            mask = filter(wav[0], rate)
+            mask = STE_filter(wav[0], rate)
             wav = wav[:, mask]
-            mask = filter(torch.flip(wav[0], dims=[-1]), rate)
+            mask = STE_filter(torch.flip(wav[0], dims=[-1]), rate)
             mask = torch.flip(mask, dims=[-1])
             wav = wav[:, mask]
             save_sample(wav, rate, target_dir, fn)

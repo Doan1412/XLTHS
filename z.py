@@ -1,21 +1,7 @@
-import torch
+# Example dictionary
+my_dict = {'key1': 5, 'key2': 3, 'key3': 8, 'key4': 1}
 
-# Example list of tensors with Long dtype
-tensor_list = [torch.tensor([1, 2, 3, 4], dtype=torch.long), torch.tensor([
-    4, 3, 2, 1], dtype=torch.long)]
+# Find the key with the minimum value
+min_key = min(my_dict, key=lambda k: my_dict[k])
 
-# Convert tensors to floating-point dtype
-tensor_list_float = [tensor.float() for tensor in tensor_list]
-
-# Stack tensors along a new dimension (dimension 0 in this case)
-stacked_tensors = torch.stack(tensor_list_float, dim=0)
-
-# Calculate the mean along the stacked dimension (dimension 0)
-average_tensor = torch.mean(stacked_tensors, dim=0)
-
-print("List of Tensors:")
-for tensor in tensor_list:
-    print(tensor)
-
-print("\nAverage Tensor:")
-print(average_tensor)
+print("Key with minimum value:", min_key)

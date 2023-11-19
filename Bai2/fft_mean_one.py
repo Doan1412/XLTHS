@@ -3,13 +3,7 @@ import os
 import torchaudio
 import torch
 import matplotlib.pyplot as plt
-
-N_FFT = 2048
-STABLE_DELTA = 0.13
-SAMPLE_RATE = 16000
-FRAME_SIZE = int(30*(10**-3)*SAMPLE_RATE)
-HOP_SIZE = int(10*(10**-3)*SAMPLE_RATE)
-START_INDEX = int(STABLE_DELTA * SAMPLE_RATE)
+from const import *
 
 
 def to_fft(frame):
