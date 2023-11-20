@@ -30,6 +30,6 @@ def MA(y, rate):
 
 
 raw_wav, sr = torchaudio.load(os.path.join(
-    os.path.dirname(__file__), 'train_raw', '40MHS', 'u.wav'))
+    os.path.dirname(__file__), 'train_clean', '30FTN', 'i.wav'))
 plt.plot(STE(raw_wav.reshape(-1), sr))
 plt.show()

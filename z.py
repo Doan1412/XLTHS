@@ -1,7 +1,14 @@
-# Example dictionary
-my_dict = {'key1': 5, 'key2': 3, 'key3': 8, 'key4': 1}
+import torch
+import numpy as np
+from kmeans_pytorch import kmeans
 
-# Find the key with the minimum value
-min_key = min(my_dict, key=lambda k: my_dict[k])
+# data
+data_size, dims, num_clusters = 1000, 2, 3
+x = np.random.randn(data_size, dims) / 6
+x = torch.from_numpy(x)
 
-print("Key with minimum value:", min_key)
+# kmeans
+cluster_ids_x, cluster_centers = kmeans(
+    X=x, num_clusters=num_clusters, distance='euclidean'
+)
+print(cluster_ids_x)
