@@ -3,9 +3,10 @@ import torchaudio
 import torch
 from tqdm import tqdm
 
-CLEAN = os.path.join(os.path.dirname(__file__), 'test_clean')
-RAW = os.path.join(os.path.dirname(__file__), 'test_raw')
-THRESHOLD = 0.01
+ON_SET = 'test'
+CLEAN = os.path.join(os.path.dirname(__file__), f"{ON_SET}_clean")
+RAW = os.path.join(os.path.dirname(__file__), f"{ON_SET}_raw")
+THRESHOLD = 0.1
 SAMPLE_RATE = 16000
 
 
@@ -20,14 +21,16 @@ SAMPLE_RATE = 16000
 
 
 def STE_filter(y, rate):
-    mask = []
-    window_size = int(5*(10**-3)*rate)
+    origin_len = len(y)
+    window_size = int(25*(10**-3)*rate)
+    hop_size = int(10*(10**-3)*rate)
     y = torch.nn.functional.pad(y, (0, window_size-1))
+    mask = [False]*len(y)
     y = y.tolist()
-    for i in range(0, len(y) - window_size + 1, 1):
+    for i in range(0, len(y) - window_size + 1, hop_size):
         window_ste = sum(x**2 for x in y[i:i+window_size])
-        mask.append(window_ste > THRESHOLD)
-    return torch.tensor(mask)
+        mask[i:i+hop_size] = [window_ste > THRESHOLD] * hop_size
+    return torch.tensor(mask[:origin_len])
 
 
 def downsample_mono(path, sr):
@@ -68,9 +71,9 @@ def split_wavs():
             rate, wav = downsample_mono(src_fn, SAMPLE_RATE)
             mask = STE_filter(wav[0], rate)
             wav = wav[:, mask]
-            mask = STE_filter(torch.flip(wav[0], dims=[-1]), rate)
-            mask = torch.flip(mask, dims=[-1])
-            wav = wav[:, mask]
+            # mask = STE_filter(torch.flip(wav[0], dims=[-1]), rate)
+            # mask = torch.flip(mask, dims=[-1])
+            # wav = wav[:, mask]
             save_sample(wav, rate, target_dir, fn)
 
 

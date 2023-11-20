@@ -12,5 +12,6 @@ for person in os.listdir(CLEAN):
         sum += duration_in_seconds
         count += 1
 
-
-print(f"{sum/(3*count):.6f}")
+delta = sum/(3*count)
+print(f"delta {delta:.6f}\n")
+print(f"start time {delta:.6f}")

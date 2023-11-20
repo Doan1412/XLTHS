@@ -14,7 +14,7 @@ def to_mean_fft_one(person, vowel_path):
     waveform, sample_rate = torchaudio.load(os.path.join(
         os.path.dirname(__file__), 'train_clean', person, vowel_path))
     fft_list = []
-    for i in range(START_INDEX, 2*START_INDEX, HOP_SIZE):
+    for i in range(START_INDEX, END_INDEX, HOP_SIZE):
         fft_list.append(to_fft(waveform[:, i:i+FRAME_SIZE]))
     stacked_tensors = torch.stack(fft_list, dim=0)
     mean_fft = torch.mean(stacked_tensors, dim=0)
