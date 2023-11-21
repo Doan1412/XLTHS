@@ -3,6 +3,7 @@ import torchaudio
 import torch
 import csv
 from const import *
+from tqdm import tqdm
 
 
 def to_fft(frame):
@@ -23,7 +24,7 @@ def to_mean_fft_one(person, vowel_path):
 
 def to_mean_fft_multi(people, vowel_path):
     fft_mean_list = []
-    for person in people:
+    for person in tqdm(people):
         fft_mean_list.append(to_mean_fft_one(person, vowel_path))
     stacked_tensors = torch.stack(fft_mean_list, dim=0)
     mean_fft_multi = torch.mean(stacked_tensors, dim=0)

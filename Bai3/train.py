@@ -6,25 +6,51 @@ import torch
 import csv
 from kmeans_pytorch import kmeans
 from const import *
+from tqdm import tqdm
 
 
 def to_mfcc(waveform):
     transform = torchaudio.transforms.MFCC(
         sample_rate=SAMPLE_RATE,
         n_mfcc=N_MFCC,
-        melkwargs={"n_fft": N_FFT, "win_length": WIN_SIZE, "hop_length": HOP_SIZE,
-                   "n_mels": 23, "center": True},
+        melkwargs={"n_fft": WIN_SIZE, "win_length": WIN_SIZE, "hop_length": HOP_SIZE,
+                   "n_mels": 23, "center": False},
     )
     mfccs = transform(waveform)
     mfcc = torch.mean(mfccs, dim=2)
     return mfcc[0]
 
 
+# def STE(y, rate):
+#     ste = []
+#     window_size = int(25*(10**-3)*rate)
+#     hop_size = int(10*(10**-3)*rate)
+#     y = torch.nn.functional.pad(y, (0, window_size-1))
+#     y = y.numpy()
+#     for i in range(0, len(y) - window_size + 1, hop_size):
+#         window_ste = np.sum(y[i:i+window_size]**2)
+#         ste.append(window_ste)
+#     return ste
+
+
+# def less_variant_segment(waveform):
+#     wav = waveform[0].numpy()
+#     ste = np.array(STE(waveform[0], SAMPLE_RATE))
+#     window_size = int(STABLE_DELTA*SAMPLE_RATE)
+#     delta = np.array([])
+#     for i in range(0, len(wav) - window_size + 1, 1):
+#         mean = np.mean(wav[i:i+window_size])
+#         total_variance = np.sum(np.abs(wav[i:i+window_size]-mean))
+#         delta = np.append(delta, total_variance)
+#     return np.argmin(delta)
+
+
 def concentrate_mfcc(people, vowel_path):
     mfccs = []
-    for person in people:
+    for person in tqdm(people):
         waveform, sample_rate = torchaudio.load(os.path.join(
             os.path.dirname(__file__), 'train_clean', person, vowel_path))
+        # startIndex = less_variant_segment(waveform)
         mfccs.append(to_mfcc(waveform[:, START_INDEX:END_INDEX]))
     return torch.stack(mfccs)
 
