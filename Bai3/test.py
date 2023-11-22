@@ -1,40 +1,6 @@
-import os
-import torchaudio
-import torch
-import csv
-import numpy as np
 from const import *
-from collections import OrderedDict
-from kmeans_pytorch import kmeans
 
 num_clusters = 0
-
-
-def to_mfcc(waveform):
-    transform = torchaudio.transforms.MFCC(
-        sample_rate=SAMPLE_RATE,
-        n_mfcc=N_MFCC,
-        melkwargs={"n_fft": N_FFT, "win_length": WIN_SIZE, "hop_length": HOP_SIZE,
-                   "n_mels": 23, "center": True},
-    )
-    mfccs = transform(waveform)
-    mfcc = torch.mean(mfccs, dim=2)
-    return mfcc[0]
-
-
-def euclidean(v1, v2):
-    return sum((p-q)**2 for p, q in zip(v1, v2)) ** .5
-
-
-def predict_one(data, person, vowel_path):
-    dist = {label: 99999 for label in data.keys()}
-    waveform, sample_rate = torchaudio.load(os.path.join(
-        os.path.dirname(__file__), 'test_clean', person, vowel_path))
-    mfcc = to_mfcc(waveform[:, START_INDEX:END_INDEX])
-    for label in data.keys():
-        for vector in data[label]:
-            dist[label] = min(dist[label], euclidean(vector, mfcc))
-    return min(dist, key=lambda k: dist[k])
 
 
 people = os.listdir(os.path.join(os.path.dirname(__file__), 'test_clean'))

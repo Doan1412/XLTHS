@@ -6,7 +6,7 @@ from tqdm import tqdm
 ON_SET = 'test'
 CLEAN = os.path.join(os.path.dirname(__file__), f"{ON_SET}_clean")
 RAW = os.path.join(os.path.dirname(__file__), f"{ON_SET}_raw")
-THRESHOLD = 0.1
+THRESHOLD = 0.03
 SAMPLE_RATE = 16000
 
 

@@ -1,9 +1,4 @@
-import os
-import csv
-import matplotlib.pyplot as plt
-import numpy as np
 from const import *
-from collections import OrderedDict
 
 mean_file = os.path.join(os.path.dirname(__file__), 'kmean.csv')
 

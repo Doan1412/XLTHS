@@ -1,24 +1,4 @@
-import numpy as np
-import matplotlib.pyplot as plt
-import os
-import torchaudio
-import torch
-import csv
-from kmeans_pytorch import kmeans
 from const import *
-from tqdm import tqdm
-
-
-def to_mfcc(waveform):
-    transform = torchaudio.transforms.MFCC(
-        sample_rate=SAMPLE_RATE,
-        n_mfcc=N_MFCC,
-        melkwargs={"n_fft": WIN_SIZE, "win_length": WIN_SIZE, "hop_length": HOP_SIZE,
-                   "n_mels": 23, "center": False},
-    )
-    mfccs = transform(waveform)
-    mfcc = torch.mean(mfccs, dim=2)
-    return mfcc[0]
 
 
 # def STE(y, rate):
@@ -43,16 +23,6 @@ def to_mfcc(waveform):
 #         total_variance = np.sum(np.abs(wav[i:i+window_size]-mean))
 #         delta = np.append(delta, total_variance)
 #     return np.argmin(delta)
-
-
-def concentrate_mfcc(people, vowel_path):
-    mfccs = []
-    for person in tqdm(people):
-        waveform, sample_rate = torchaudio.load(os.path.join(
-            os.path.dirname(__file__), 'train_clean', person, vowel_path))
-        # startIndex = less_variant_segment(waveform)
-        mfccs.append(to_mfcc(waveform[:, START_INDEX:END_INDEX]))
-    return torch.stack(mfccs)
 
 
 # def k_means_loop(num_clusters, X, loop=1):
