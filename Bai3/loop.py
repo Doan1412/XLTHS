@@ -50,7 +50,7 @@ def run(total):
 
 
 total = counter.copy()
-loop = 15
+loop = 10
 for i in tqdm(range(loop)):
     run(total)
 for key in total.keys():

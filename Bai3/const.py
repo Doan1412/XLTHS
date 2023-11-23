@@ -13,10 +13,10 @@ STABLE_DELTA = 0.1
 SAMPLE_RATE = 16000
 WIN_SIZE = int(30*(10**-3)*SAMPLE_RATE)
 HOP_SIZE = int(10*(10**-3)*SAMPLE_RATE)
-START_TIME = 0.065
+START_TIME = 0.07
 START_INDEX = int(START_TIME * SAMPLE_RATE)
 END_INDEX = int(START_INDEX + STABLE_DELTA*SAMPLE_RATE)
-NUM_CLUSTER = 4
+NUM_CLUSTER = 3
 
 
 def to_mfcc(waveform):
@@ -33,7 +33,7 @@ def to_mfcc(waveform):
 
 def concentrate_mfcc(people, vowel_path):
     mfccs = []
-    for person in tqdm(people):
+    for person in people:
         waveform, sample_rate = torchaudio.load(os.path.join(
             os.path.dirname(__file__), 'train_clean', person, vowel_path))
         # startIndex = less_variant_segment(waveform)
