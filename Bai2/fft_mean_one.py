@@ -6,11 +6,6 @@ import matplotlib.pyplot as plt
 from const import *
 
 
-def to_fft(frame):
-    fft = torch.fft.fft(input=frame, n=N_FFT)
-    return fft.reshape(-1)[:int(N_FFT/2)]
-
-
 waveform, sample_rate = torchaudio.load(os.path.join(
     os.path.dirname(__file__), 'train_clean', '23MTL', 'a.wav'))
 

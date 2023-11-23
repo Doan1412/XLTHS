@@ -6,14 +6,6 @@ import numpy as np
 from const import *
 
 
-# def to_fft(frame):
-#     fft = torch.fft.fft(input=frame, n=N_FFT)
-#     return fft.reshape(-1)[:int(N_FFT/2)]
-def to_fft(frame):
-    fft = torch.fft.fft(input=frame, n=N_FFT)
-    return torch.abs(fft.reshape(-1)[:int(N_FFT/2)])
-
-
 def to_mean_fft_one(person, vowel_path):
     waveform, sample_rate = torchaudio.load(os.path.join(
         os.path.dirname(__file__), 'test_clean', person, vowel_path))

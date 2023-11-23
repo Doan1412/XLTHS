@@ -1,14 +1,8 @@
 import os
 import torchaudio
-import torch
 import csv
 from const import *
 from tqdm import tqdm
-
-
-def to_fft(frame):
-    fft = torch.fft.fft(input=frame, n=N_FFT)
-    return torch.abs(fft.reshape(-1)[:int(N_FFT/2)])
 
 
 def to_mean_fft_one(person, vowel_path):
