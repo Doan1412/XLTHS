@@ -20,11 +20,11 @@ mfcc_clusters = {
 
 def run(total):
     data = {
-        'a': kmeans(num_clusters=NUM_CLUSTER, X=mfcc_clusters['a'])[1],
-        'e': kmeans(num_clusters=NUM_CLUSTER, X=mfcc_clusters['e'])[1],
-        'i': kmeans(num_clusters=NUM_CLUSTER, X=mfcc_clusters['i'])[1],
-        'o': kmeans(num_clusters=NUM_CLUSTER, X=mfcc_clusters['o'])[1],
-        'u': kmeans(num_clusters=NUM_CLUSTER, X=mfcc_clusters['u'])[1],
+        'a': k_means(num_clusters=NUM_CLUSTER, X=mfcc_clusters['a']),
+        'e': k_means(num_clusters=NUM_CLUSTER, X=mfcc_clusters['e']),
+        'i': k_means(num_clusters=NUM_CLUSTER, X=mfcc_clusters['i']),
+        'o': k_means(num_clusters=NUM_CLUSTER, X=mfcc_clusters['o']),
+        'u': k_means(num_clusters=NUM_CLUSTER, X=mfcc_clusters['u']),
     }
 
     people = os.listdir(os.path.join(os.path.dirname(__file__), 'test_clean'))

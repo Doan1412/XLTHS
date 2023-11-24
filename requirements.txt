@@ -4,4 +4,4 @@ numpy
 soundfile
 tqdm
 matplotlib
-kmeans-pytorch
+scikit-learn

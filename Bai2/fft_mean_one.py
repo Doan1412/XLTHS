@@ -11,7 +11,10 @@ waveform, sample_rate = torchaudio.load(os.path.join(
 
 fft_list = []
 
-for i in range(START_INDEX, END_INDEX, HOP_SIZE):
+wave_len = waveform.size(1)
+startIndex = int(wave_len/3)
+endIndex = int(startIndex*2-0.03*SAMPLE_RATE)
+for i in range(startIndex, endIndex, HOP_SIZE):
     fft_list.append(to_fft(waveform[:, i:i+FRAME_SIZE]))
 
 stacked_tensors = torch.stack(fft_list, dim=0)

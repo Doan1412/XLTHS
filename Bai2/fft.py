@@ -8,8 +8,9 @@ from const import *
 
 waveform, sample_rate = torchaudio.load(os.path.join(
     os.path.dirname(__file__), 'train_clean', '23MTL', 'a.wav'))
-
-frame = waveform[:, START_INDEX:START_INDEX+FRAME_SIZE]
+wave_len = waveform.size(1)
+startIndex = int(wave_len/3)
+frame = waveform[:, startIndex:startIndex+FRAME_SIZE]
 # plt.plot(frame.t().numpy())
 # plt.show()
 

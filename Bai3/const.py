@@ -3,20 +3,15 @@ import torchaudio
 import os
 import csv
 from tqdm import tqdm
-from kmeans_pytorch import kmeans
 from collections import OrderedDict
 import matplotlib.pyplot as plt
+from sklearn.cluster import KMeans
 
-N_FFT = 1024
 N_MFCC = 13
-STABLE_DELTA = 0.1
 SAMPLE_RATE = 16000
 WIN_SIZE = int(30*(10**-3)*SAMPLE_RATE)
 HOP_SIZE = int(10*(10**-3)*SAMPLE_RATE)
-START_TIME = 0.07
-START_INDEX = int(START_TIME * SAMPLE_RATE)
-END_INDEX = int(START_INDEX + STABLE_DELTA*SAMPLE_RATE)
-NUM_CLUSTER = 3
+NUM_CLUSTER = 5
 
 
 def to_mfcc(waveform):
@@ -36,8 +31,10 @@ def concentrate_mfcc(people, vowel_path):
     for person in people:
         waveform, sample_rate = torchaudio.load(os.path.join(
             os.path.dirname(__file__), 'train_clean', person, vowel_path))
-        # startIndex = less_variant_segment(waveform)
-        mfccs.append(to_mfcc(waveform[:, START_INDEX:END_INDEX]))
+        wave_len = waveform.size(1)
+        startIndex = int(wave_len/3)
+        endIndex = int(startIndex*2-0.03*SAMPLE_RATE)
+        mfccs.append(to_mfcc(waveform[:, startIndex:endIndex]))
     return torch.stack(mfccs)
 
 
@@ -49,8 +46,16 @@ def predict_one(data, person, vowel_path):
     dist = {label: 99999 for label in data.keys()}
     waveform, sample_rate = torchaudio.load(os.path.join(
         os.path.dirname(__file__), 'test_clean', person, vowel_path))
-    mfcc = to_mfcc(waveform[:, START_INDEX:END_INDEX])
+    wave_len = waveform.size(1)
+    startIndex = int(wave_len/3)
+    endIndex = startIndex*2
+    mfcc = to_mfcc(waveform[:, startIndex:endIndex])
     for label in data.keys():
         for vector in data[label]:
             dist[label] = min(dist[label], euclidean(vector, mfcc))
     return min(dist, key=lambda k: dist[k])
+
+
+def k_means(num_clusters, X):
+    input = X.numpy()
+    return torch.tensor(KMeans(n_clusters=num_clusters, n_init='auto').fit(input).cluster_centers_)
