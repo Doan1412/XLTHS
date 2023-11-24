@@ -55,6 +55,7 @@ for i in tqdm(range(loop)):
     run(total)
 for key in total.keys():
     total[key] /= loop
+total['all'] = sum(val for val in total.values())/(21*5)*100
 
 output = os.path.join(os.path.dirname(__file__), 'average.csv')
 # Write result to CSV

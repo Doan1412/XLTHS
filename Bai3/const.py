@@ -7,11 +7,11 @@ from collections import OrderedDict
 import matplotlib.pyplot as plt
 from sklearn.cluster import KMeans
 
-N_MFCC = 13
+N_MFCC = 20
 SAMPLE_RATE = 16000
 WIN_SIZE = int(30*(10**-3)*SAMPLE_RATE)
 HOP_SIZE = int(10*(10**-3)*SAMPLE_RATE)
-NUM_CLUSTER = 5
+NUM_CLUSTER = 2
 
 
 def to_mfcc(waveform):
@@ -19,7 +19,7 @@ def to_mfcc(waveform):
         sample_rate=SAMPLE_RATE,
         n_mfcc=N_MFCC,
         melkwargs={"n_fft": WIN_SIZE, "win_length": WIN_SIZE, "hop_length": HOP_SIZE,
-                   "n_mels": 23, "center": True, "window_fn": torch.hann_window},
+                   "n_mels": 46, "center": True, "window_fn": torch.hann_window},
     )
     mfccs = transform(waveform)
     mfcc = torch.mean(mfccs, dim=2)
@@ -33,7 +33,7 @@ def concentrate_mfcc(people, vowel_path):
             os.path.dirname(__file__), 'train_clean', person, vowel_path))
         wave_len = waveform.size(1)
         startIndex = int(wave_len/3)
-        endIndex = int(startIndex*2-0.03*SAMPLE_RATE)
+        endIndex = int(startIndex*2-0.0*SAMPLE_RATE)
         mfccs.append(to_mfcc(waveform[:, startIndex:endIndex]))
     return torch.stack(mfccs)
 
