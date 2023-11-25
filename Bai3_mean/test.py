@@ -1,0 +1,56 @@
+from const import *
+
+
+people = os.listdir(os.path.join(os.path.dirname(__file__), 'test_clean'))
+
+mean_file = os.path.join(os.path.dirname(__file__), 'mean.csv')
+
+with open(mean_file, 'r') as csv_file:
+    csv_reader = csv.reader(csv_file)
+
+    # Read the header row
+    header = next(csv_reader)
+
+    # Initialize a dictionary to store the data
+    data = {label: [] for label in header}
+
+    # Read the data rows
+    for row in csv_reader:
+        for i, value in enumerate(row):
+            value = float(value)
+            data[header[i]].append(value)
+
+counter = {
+    'a': 0,
+    'e': 0,
+    'i': 0,
+    'o': 0,
+    'u': 0,
+}
+result = {
+    'a': counter.copy(),
+    'e': counter.copy(),
+    'i': counter.copy(),
+    'o': counter.copy(),
+    'u': counter.copy(),
+}
+for person in people:
+    result['a'][predict_one(data, person, 'a.wav')] += 1
+    result['e'][predict_one(data, person, 'e.wav')] += 1
+    result['i'][predict_one(data, person, 'i.wav')] += 1
+    result['o'][predict_one(data, person, 'o.wav')] += 1
+    result['u'][predict_one(data, person, 'u.wav')] += 1
+
+output = os.path.join(os.path.dirname(__file__), 'test.csv')
+# Write result to CSV
+with open(output, 'w', newline='') as csv_file:
+    csv_writer = csv.writer(csv_file)
+    truths = result.keys()
+    predicts = counter.keys()
+    # Write header row
+    csv_writer.writerow(['']+list(predicts))
+
+    # Write result rows
+    for truth in truths:
+        row = [truth] + list(result[truth].values())
+        csv_writer.writerow(row)

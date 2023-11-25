@@ -7,11 +7,11 @@ from collections import OrderedDict
 import matplotlib.pyplot as plt
 from sklearn.cluster import KMeans
 
-N_MFCC = 20
+N_MFCC = 13
 SAMPLE_RATE = 16000
-WIN_SIZE = int(30*(10**-3)*SAMPLE_RATE)
-HOP_SIZE = int(10*(10**-3)*SAMPLE_RATE)
-NUM_CLUSTER = 2
+WIN_SIZE = int(40*(10**-3)*SAMPLE_RATE)
+HOP_SIZE = int(5*(10**-3)*SAMPLE_RATE)
+NUM_CLUSTER = 5
 
 
 def to_mfcc(waveform):

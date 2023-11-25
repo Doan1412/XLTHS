@@ -45,6 +45,12 @@ for person in people:
     result['o'][predict_one(data, person, 'o.wav')] += 1
     result['u'][predict_one(data, person, 'u.wav')] += 1
 
+keys = result.keys()
+for i in keys:
+    for j in keys:
+        result[i][j] *= 100/21
+
+
 output = os.path.join(os.path.dirname(__file__), 'test.csv')
 # Write result to CSV
 with open(output, 'w', newline='') as csv_file:
