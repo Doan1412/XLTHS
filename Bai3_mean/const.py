@@ -13,16 +13,12 @@ WIN_SIZE = int(40*(10**-3)*SAMPLE_RATE)
 HOP_SIZE = int(5*(10**-3)*SAMPLE_RATE)
 
 
-def rectange(len):
-    return torch.tensor([1]*len)
-
-
 def to_mfcc(waveform):
     transform = torchaudio.transforms.MFCC(
         sample_rate=SAMPLE_RATE,
         n_mfcc=N_MFCC,
         melkwargs={"n_fft": WIN_SIZE, "win_length": WIN_SIZE, "hop_length": HOP_SIZE,
-                   "n_mels": 46, "center": True, "window_fn": torch.hann_window},
+                   "n_mels": 46, "center": True, "window_fn": torch.hann_window},  # rectangle: torch.ones, hamming: torch.hann_window
     )
     mfccs = transform(waveform)
     mfcc = torch.mean(mfccs, dim=2)

@@ -1,3 +1,4 @@
+import time
 from const import *
 
 num_clusters = 0
@@ -38,13 +39,22 @@ result = {
     'o': counter.copy(),
     'u': counter.copy(),
 }
+
+# Record the start time
+start_time = time.time()
 for person in people:
     result['a'][predict_one(data, person, 'a.wav')] += 1
     result['e'][predict_one(data, person, 'e.wav')] += 1
     result['i'][predict_one(data, person, 'i.wav')] += 1
     result['o'][predict_one(data, person, 'o.wav')] += 1
     result['u'][predict_one(data, person, 'u.wav')] += 1
+# Record the end time
+end_time = time.time()
 
+# Calculate the elapsed time
+elapsed_time = end_time - start_time
+
+print(f"Elapsed Time: {elapsed_time} seconds")
 keys = result.keys()
 for i in keys:
     for j in keys:
