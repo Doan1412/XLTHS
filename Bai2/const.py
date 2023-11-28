@@ -9,6 +9,7 @@ from scipy.spatial.distance import euclidean
 N_FFT = 2048
 FRAME_SIZE = 480
 HOP_SIZE = 160
+SAMPLE_RATE = 16000
 
 
 print(str(FRAME_SIZE)+" " + str(HOP_SIZE))
