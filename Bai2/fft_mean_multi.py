@@ -3,6 +3,7 @@ from const import *
 
 people = os.listdir(os.path.join(os.path.dirname(__file__), 'train_clean'))
 
+#Tạo dict chứa dữ liệu về các vector đặc trưng của từng nguyên âm
 data = {
     'a': to_mean_fft_multi(people, 'train_clean', 'a.wav'),
     'e': to_mean_fft_multi(people, 'train_clean', 'e.wav'),

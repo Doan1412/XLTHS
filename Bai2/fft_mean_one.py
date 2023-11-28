@@ -13,7 +13,8 @@ fft_list = []
 
 wave_len = waveform.size(1)
 startIndex = int(wave_len/3)
-endIndex = int(startIndex*2-0.03*SAMPLE_RATE)
+# endIndex = int(startIndex*2)
+endIndex = int(startIndex*2-0.03*sample_rate)
 for i in range(startIndex, endIndex, HOP_SIZE):
     fft_list.append(to_fft(waveform[:, i:i+FRAME_SIZE]))
 
@@ -26,7 +27,7 @@ average_fft = torch.mean(stacked_tensors, dim=0)
 #            fft.t(), delimiter=',', fmt='%.2f%+.2fj')
 
 k = np.arange(1, N_FFT, 1)
-frequencies = k * SAMPLE_RATE / N_FFT
+frequencies = k * sample_rate / N_FFT
 plt.plot(frequencies[:int(N_FFT/2)], torch.abs(average_fft))
 plt.title('One-sided Average Linear Magnitude Spectrum')
 plt.xlabel('Frequency Axis (Hz)')
