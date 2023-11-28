@@ -12,3 +12,7 @@ plt.plot(raw_wav.t().numpy())
 plt.subplot(2, 1, 2)
 plt.plot(clean_wav.t().numpy())
 plt.show()
+
+
+
+
