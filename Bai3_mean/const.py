@@ -17,8 +17,9 @@ def to_mfcc(waveform):
     transform = torchaudio.transforms.MFCC(
         sample_rate=SAMPLE_RATE,
         n_mfcc=N_MFCC,
-        melkwargs={"n_fft": WIN_SIZE, "win_length": WIN_SIZE, "hop_length": HOP_SIZE,
-                   "n_mels": 46, "center": True, "window_fn": torch.hann_window},  # rectangle: torch.ones, hamming: torch.hann_window
+        melkwargs={"n_fft": 1024, "win_length": WIN_SIZE, "hop_length": HOP_SIZE,
+                   "n_mels": 46, "center": True, "window_fn": torch.hann_window},
+        # rectangle: torch.ones, hamming: torch.hann_window
     )
     mfccs = transform(waveform)
     mfcc = torch.mean(mfccs, dim=2)
@@ -32,7 +33,7 @@ def concentrate_mfcc(people, vowel_path):
             os.path.dirname(__file__), 'train_clean', person, vowel_path))
         wave_len = waveform.size(1)
         startIndex = int(wave_len/3)
-        endIndex = int(startIndex*2-0.0*SAMPLE_RATE)
+        endIndex = int(startIndex*2)
         mfccs.append(to_mfcc(waveform[:, startIndex:endIndex]))
     return torch.stack(mfccs)
 
